@@ -10,8 +10,11 @@ Programa creado para administrar la base de datos de registro de personas
 '''
 
 
+from os import name
+from re import X
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import query
 db = SQLAlchemy()
 
 class Persona(db.Model):
@@ -53,8 +56,36 @@ def report(limit=0, offset=0):
 
     return json_result_list
 
+def dashboard():
+    # Alumno:
+        # Implementar una función en persona.py llamada "dashboard"
+        # Lo que desea es realizar un gráfico de linea con las edades
+        # de todas las personas en la base de datos
 
-if __name__ == "__main__":
+        # Para eso, su función "dashboard" debe devolver dos valores:
+        # - El primer valor que debe devolver es "x", que debe ser
+        # los Ids de todas las personas en su base de datos
+        # - El segundo valor que debe devolver es "y", que deben ser
+        # todas las edades respectivas a los Ids que se encuentran en "x"
+
+        #22/10/2021
+       
+        x = []
+        y = []
+
+        query = db.session.query(Persona)
+        datos = query.all()
+        for persona in datos:
+            id = persona.id
+            edad = persona.age
+            x.append(id)
+            y.append(edad)
+        
+        return x,y      
+       
+        
+     
+if __name__ == '__main__':
     print("Test del modulo heart.py")
 
     # Crear una aplicación Flask para testing
@@ -72,6 +103,9 @@ if __name__ == "__main__":
 
     # Aquí se puede ensayar todo lo que necesitemos con nuestra DB
     # ...
+    
+    dashboard()
 
+    
     db.session.remove()
     db.drop_all()
